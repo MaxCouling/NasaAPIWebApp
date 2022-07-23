@@ -1,26 +1,60 @@
-import React from 'react';
-import logo from './logo.svg';
+import axios from "axios";
+import { useState } from 'react';
 import './App.css';
 
 function App() {
+  // Declare a new state variable, which we'll call "pokemonName"
+  const [superhero, setSuperhero] = useState("");
+  const [superheroInfo, setsuperheroInfo] = useState<undefined | any>(undefined);
+  const options = {
+    method: 'GET',
+    url: 'https://superhero-search.p.rapidapi.com/api/',
+    params: {hero: "spiderman"},
+    headers: {
+      'X-RapidAPI-Key': 'b66341a690msh63fbe70dfb535aep17129bjsn6ab6c80d1580',
+      'X-RapidAPI-Host': 'superhero-search.p.rapidapi.com'
+    }
+  };
+  
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+    <div>
+      <h1>
+        Superhero lookup
+      </h1>
+      
+      <div>
+        
+        <label>Favorite Superhero</label>
+        <br/>
+        
+        <input 
+          type="text" 
+          id="superhero" 
+          name="superhero" 
+          onChange={(e) => setSuperhero(e.target.value)}
         >
-          Learn React
-        </a>
-      </header>
+        </input>
+        <button onClick={search}>
+        Search
+        </button>
+      </div>
+
+      <p>
+        You have entered {superhero}
+      </p>
+      
     </div>
   );
-}
+  function search(){
+    options.params.hero = superhero
 
+    axios.request(options).then(function (response) {
+      console.log(response.data);
+    }).catch(function (error) {
+      console.error(error);
+    });
+    //onChange={e => setSuperhero(e.target.value)}/><br/>
+  }
+
+}
 export default App;
