@@ -2,6 +2,9 @@ import axios from "axios";
 import { useState } from 'react';
 import './App.css';
 
+import unitiled from './Untitled.png';
+
+
 function App() {
   // Declare a new state variable, which we'll call "pokemonName"
   const [superhero, setSuperhero] = useState("");
@@ -34,7 +37,7 @@ function App() {
           onChange={(e) => setSuperhero(e.target.value)}
         >
         </input>
-        <button onClick={search}>
+        <button onClick={search} >
         Search
         </button>
       </div>
@@ -42,14 +45,30 @@ function App() {
       <p>
         You have entered {superhero}
       </p>
+      {superheroInfo === undefined ? (
+
+        <> 
+        
+        <img src={unitiled} />
       
+      <p>Superhero not found</p>
+        </>
+      ) : (
+        <div id="superhero-result">
+          <img src={superheroInfo.images.md || unitiled} />
+          <p>{superheroInfo.connections.groupAffiliation} </p>
+        </div>
+      )
+
+      }
     </div>
   );
   function search(){
-    options.params.hero = superhero
+    options.params.hero = superhero;
 
     axios.request(options).then(function (response) {
-      console.log(response.data);
+      if(response.data === 'Hero Not Found') {setsuperheroInfo(undefined); return};
+      setsuperheroInfo(response.data);
     }).catch(function (error) {
       console.error(error);
     });
